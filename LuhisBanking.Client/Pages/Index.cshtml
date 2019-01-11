@@ -1,0 +1,49 @@
+﻿@page "/"
+@using TrueLayerAccess.Dtos
+@inject HttpClient Http
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+
+<a href="@(AuthLink)">Add account</a>
+
+@if (Accounts != null)
+{
+    <ul>
+        @foreach (var acc in Accounts)
+        {
+            <li>account @acc.Name @acc.Balance</li>
+        }
+
+        @string.Join(" ", Accounts.Select(a => a.Name))
+    </ul>
+}
+else
+{
+    <span>Loading...</span>
+}
+
+matt woz ere.  account count @(Accounts == null ? "null" : Accounts.Length.ToString())
+@functions
+{
+AccountDto[] Accounts;
+string AuthLink;
+
+protected override async Task OnInitAsync()
+{
+    await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
+    {
+        AuthLink = await (await Http.GetAsync("api/CallBack/GetAuthLink")).Content.ReadAsStringAsync();
+    });
+
+    await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
+    {
+        Accounts = (await Http.GetJsonAsync<AccountDto[]>("api/Accounts/GetAll"));
+    });
+}
+
+}

@@ -1,0 +1,7 @@
+{
+  "error": "internal_error",
+  "error_description": "Well, this is embarrassing!",
+  "error_details": {
+    "detail_key": "detail value"
+  }
+}
