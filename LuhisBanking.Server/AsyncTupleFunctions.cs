@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace WebApplication1.Server
+namespace LuhisBanking.Server
 {
     public static class AsyncTupleFunctions
     {

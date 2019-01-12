@@ -31,9 +31,8 @@ namespace TrueLayerAccess
             return Json.Deserialize<TokenResponse>(json);
         }
 
-        public static Task<TokenResponse> GetAuthToken(TokenRequest req)
-        {
-            return Post(new Dictionary<string, string>
+        public static Task<TokenResponse> GetAuthToken(TokenRequest req) =>
+            Post(new Dictionary<string, string>
             {
                 {"grant_type", "authorization_code"},
                 {"client_id", req.ClientId},
@@ -41,17 +40,14 @@ namespace TrueLayerAccess
                 {"redirect_uri", req.RedirectUri},
                 {"code", req.Code}
             });
-        }
 
-        public static Task<TokenResponse> RenewAuthToken(RefreshRequest req)
-        {
-            return Post(new Dictionary<string, string>
+        public static Task<TokenResponse> RenewAuthToken(RefreshRequest req) =>
+            Post(new Dictionary<string, string>
             {
                 {"grant_type", "refresh_token"},
                 {"client_id", req.ClientId},
                 {"client_secret", req.ClientSecret},
                 {"refresh_token", req.RefreshToken},
             });
-        }
     }
 }

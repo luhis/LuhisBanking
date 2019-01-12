@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using LuhisBanking.Services;
 using Microsoft.AspNetCore.Mvc;
 using TrueLayerAccess.Dtos;
-using WebApplication1.Server;
 
 namespace LuhisBanking.Server.Controllers
 {
@@ -22,7 +21,7 @@ namespace LuhisBanking.Server.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult<IReadOnlyList<AccountDto>>> GetAll()
         {
-            var authAccessor = new AuthAccessor(this.Request.Cookies, this.Response.Cookies) as IAuthAccessor;
+            var authAccessor = new AuthAccessor(this.Request.Cookies, this.Response.Cookies);
             var t = await trueLayerService.GetAccounts(authAccessor);
             return await t.Match(async success =>
             {
