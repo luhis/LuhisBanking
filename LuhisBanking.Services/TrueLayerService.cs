@@ -30,17 +30,20 @@ namespace LuhisBanking.Services
                         tokens.RefreshToken));
                     authAccessor.SetTokens(new Tokens(reAuth.access_token, reAuth.refresh_token));
                     var r = await f(reAuth.access_token);
-                    return (OneOf<T, Error>) r.AsT0;
+                    return r.Match(success => (OneOf<T, Error>) success,
+                        _ => throw new Exception("Failed to refresh auth"),
+                        error => (OneOf<T, Error>) error);
                 },
                 error => Task.FromResult((OneOf<T, Error>) error));
         }
-        
+
         Task<OneOf<Result<Account>, Error>> ITrueLayerService.GetAccounts(IAuthAccessor authAccessor)
         {
             return RetryIfUnAuthorised(TrueLayerApi.GetAllAccountsAsync, authAccessor);
         }
 
-        Task<OneOf<Result<Balance>, Error>> ITrueLayerService.GetAccountBalance(IAuthAccessor authAccessor, string accountId)
+        Task<OneOf<Result<Balance>, Error>> ITrueLayerService.GetAccountBalance(IAuthAccessor authAccessor,
+            string accountId)
         {
             return RetryIfUnAuthorised(t => TrueLayerApi.GetAccountBalance(accountId, t), authAccessor);
         }
