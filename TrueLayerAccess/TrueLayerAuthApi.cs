@@ -14,7 +14,9 @@ namespace TrueLayerAccess
         {
             var scopes = new[] {"info", "accounts", "balance", "offline_access"};
             return
-                $"https://auth.{TrueLayerUris.BaseUri}?response_type=code&client_id={clientId}&nonce=1461411507&scope={JoinWithEscapedSpaces(scopes)}&redirect_uri={redirect}&enable_oauth_providers=false&enable_open_banking_providers=true&enable_credentials_sharing_providers=false";
+                $"https://auth.{TrueLayerUris.BaseUri}?" + 
+                $"response_type=code&client_id={clientId}&nonce=1461411507&scope={JoinWithEscapedSpaces(scopes)}&" + 
+                $"redirect_uri={redirect}&enable_oauth_providers=false&enable_open_banking_providers=true&enable_credentials_sharing_providers=false";
         }
 
         private static async Task<TokenResponse> Post(IEnumerable<KeyValuePair<string, string>> data)
