@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace WebApplication1.Server
+namespace LuhisBanking.Server
 {
     public static class CookieExtensions
     {
         private static string AccessToken => "access_token";
-        private static string RefreshToken => "renewal_token";
+        private static string RefreshToken => "refresh_token";
 
         public static void SetAccessToken(this IResponseCookies cookies, string accessToken)
         {
@@ -22,7 +22,7 @@ namespace WebApplication1.Server
             return cookies[AccessToken];
         }
 
-        public static string GetRenewalToken(this IRequestCookieCollection cookies)
+        public static string GetRefreshToken(this IRequestCookieCollection cookies)
         {
             return cookies[RefreshToken];
         }

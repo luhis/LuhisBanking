@@ -22,26 +22,17 @@ namespace LuhisBanking.Server.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult<IReadOnlyList<AccountDto>>> GetAll()
         {
-            var token = this.Request.Cookies.GetAccessToken();
-            var refreshToken = this.Request.Cookies.GetRenewalToken();
-            if (!string.IsNullOrEmpty(token))
+            var authAccessor = new AuthAccessor(this.Request.Cookies, this.Response.Cookies) as IAuthAccessor;
+            var t = await trueLayerService.GetAccounts(authAccessor.GetTokens());
+            return await t.Match(async success =>
             {
-                var tokens = new Tokens(token, refreshToken);
-                var t = await trueLayerService.GetAccounts(tokens);
-                return await t.Match(async success =>
-                {
-                    var tasks = success.results
-                        .Select(a => (a, trueLayerService.GetAccountBalance(tokens, a.account_id)))
-                        .Select(AsyncTupleFunctions.Convert);
-                    var res = await Task.WhenAll(tasks);
-                    return new ActionResult<IReadOnlyList<AccountDto>>(res.Select(ToDto).ToList());
+                var tasks = success.results
+                    .Select(a => (a, trueLayerService.GetAccountBalance(authAccessor.GetTokens(), a.account_id)))
+                    .Select(AsyncTupleFunctions.Convert);
+                var res = await Task.WhenAll(tasks);
+                return new ActionResult<IReadOnlyList<AccountDto>>(res.Select(ToDto).ToList());
 
-                }, error => throw new Exception(error.error));
-            }
-            else
-            {
-                return new AccountDto[]{ };
-            }
+            }, error => throw new Exception(error.error));
         }
 
         private static AccountDto ToDto((Account, OneOf.OneOf<Result<Balance>, Error>) a)

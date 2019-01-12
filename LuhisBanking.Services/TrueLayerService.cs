@@ -17,8 +17,9 @@ namespace LuhisBanking.Services
         }
 
         private async Task<OneOf<T, Error>> RetryIfUnAuthorised<T>(Func<string, Task<OneOf<T, Unauthorised, Error>>> f,
-            Tokens tokens)
+            IAuthAccessor authAccessor)
         {
+            var tokens = authAccessor.GetTokens();
             var res = await f(tokens.AccessToken);
             return await res.Match(
                 some => Task.FromResult((OneOf<T, Error>) some),
@@ -27,20 +28,21 @@ namespace LuhisBanking.Services
                     var reAuth = await TrueLayerAuthApi.RenewAuthToken(new RefreshRequest(myAppSettings.ClientId,
                         myAppSettings.ClientSecret,
                         tokens.RefreshToken));
+                    authAccessor.SetTokens(new Tokens(reAuth.access_token, reAuth.refresh_token));
                     var r = await f(reAuth.access_token);
                     return (OneOf<T, Error>) r.AsT0;
                 },
                 error => Task.FromResult((OneOf<T, Error>) error));
         }
         
-        Task<OneOf<Result<Account>, Error>> ITrueLayerService.GetAccounts(Tokens tokens)
+        Task<OneOf<Result<Account>, Error>> ITrueLayerService.GetAccounts(IAuthAccessor authAccessor)
         {
-            return RetryIfUnAuthorised(TrueLayerApi.GetAllAccountsAsync, tokens);
+            return RetryIfUnAuthorised(TrueLayerApi.GetAllAccountsAsync, authAccessor);
         }
 
-        Task<OneOf<Result<Balance>, Error>> ITrueLayerService.GetAccountBalance(Tokens tokens, string accountId)
+        Task<OneOf<Result<Balance>, Error>> ITrueLayerService.GetAccountBalance(IAuthAccessor authAccessor, string accountId)
         {
-            return RetryIfUnAuthorised(t => TrueLayerApi.GetAccountBalance(accountId, t), tokens);
+            return RetryIfUnAuthorised(t => TrueLayerApi.GetAccountBalance(accountId, t), authAccessor);
         }
     }
 }

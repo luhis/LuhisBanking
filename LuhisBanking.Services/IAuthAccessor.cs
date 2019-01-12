@@ -2,7 +2,8 @@
 {
     public interface IAuthAccessor
     {
-        string GetAccessToken();
-        string GetRefreshToken();
+        Tokens GetTokens();
+
+        void SetTokens(Tokens tokens);
     }
 }
