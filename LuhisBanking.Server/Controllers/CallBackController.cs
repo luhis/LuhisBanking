@@ -38,9 +38,8 @@ namespace LuhisBanking.Server.Controllers
             {
                 var r = new CallBackResult(code, scope.Split(' '));
                 var t = await TrueLayerAuthApi.GetAuthToken(new TokenRequest(settings.ClientId, settings.ClientSecret, r.Code, GetRedirectUrl()));
-                
-                Response.Cookies.SetAccessToken(t.access_token);
-                Response.Cookies.SetRefreshToken(t.refresh_token);
+                var authAccess = new AuthAccessor(this.Request.Cookies, this.Response.Cookies) as IAuthAccessor;
+                authAccess.SetTokens(new Tokens(t.access_token, t.refresh_token));
             }
             catch (Exception e)
             {
