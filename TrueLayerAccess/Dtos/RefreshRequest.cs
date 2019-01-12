@@ -4,9 +4,9 @@
     {
         public RefreshRequest(string clientId, string clientSecret, string refreshToken)
         {
-            this.ClientId = clientId;
-            this.ClientSecret = clientSecret;
-            this.RefreshToken = refreshToken;
+            this.ClientId = clientId.NotNullOrEmpty();
+            this.ClientSecret = clientSecret.NotNullOrEmpty();
+            this.RefreshToken = refreshToken.NotNullOrEmpty();
         }
 
         public string ClientId { get; }

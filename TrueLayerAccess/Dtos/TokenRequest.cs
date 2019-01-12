@@ -4,10 +4,10 @@
     {
         public TokenRequest(string clientId, string clientSecret, string code, string redirectUri)
         {
-            this.ClientId = clientId;
-            this.ClientSecret = clientSecret;
-            this.Code = code;
-            this.RedirectUri = redirectUri;
+            this.ClientId = clientId.NotNullOrEmpty();
+            this.ClientSecret = clientSecret.NotNullOrEmpty();
+            this.Code = code.NotNullOrEmpty();
+            this.RedirectUri = redirectUri.NotNullOrEmpty();
         }
 
         public string ClientId { get; }
