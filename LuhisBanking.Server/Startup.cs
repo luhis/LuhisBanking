@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Blazor.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,10 +23,19 @@ namespace LuhisBanking.Server
             this.conf = conf;
         }
 
+        private static readonly IEnumerable<Action<IServiceCollection>> DIModules = new Action<IServiceCollection>[]
+        {
+            LuhisBanking.Persistence.DiModule.Add
+        };
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            foreach (var action in DIModules)
+            {
+                action(services);
+            }
             services.AddMvc();
 
             services.AddResponseCompression(options =>

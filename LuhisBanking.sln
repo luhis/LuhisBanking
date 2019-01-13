@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Server", "LuhisBanking.Server\LuhisBanking.Server.csproj", "{97352D70-0F52-471F-8324-645538EA4EA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Server", "LuhisBanking.Server\LuhisBanking.Server.csproj", "{97352D70-0F52-471F-8324-645538EA4EA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Client", "LuhisBanking.Client\LuhisBanking.Client.csproj", "{A31AE683-9E40-495D-93D5-5BD29E50D767}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Client", "LuhisBanking.Client\LuhisBanking.Client.csproj", "{A31AE683-9E40-495D-93D5-5BD29E50D767}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Shared", "LuhisBanking.Shared\LuhisBanking.Shared.csproj", "{78D02953-E4CF-43B8-A133-06516B101F62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Shared", "LuhisBanking.Shared\LuhisBanking.Shared.csproj", "{78D02953-E4CF-43B8-A133-06516B101F62}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueLayerAccess", "TrueLayerAccess\TrueLayerAccess.csproj", "{F5E9799E-484A-4552-A119-C9A0EAE681FB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueLayer.Api.Test.Unit", "TrueLayer.Api.Test.Uni\TrueLayer.Api.Test.Unit.csproj", "{6559F734-5A62-4659-8909-1F49B6F658BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Services", "LuhisBanking.Services\LuhisBanking.Services.csproj", "{F31E4C0C-5705-4DC2-B6E0-581066DE6810}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Persistence", "LuhisBanking.Persistance\LuhisBanking.Persistence.csproj", "{9E0F367F-EE0D-4E3B-99BD-067449477B1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{F31E4C0C-5705-4DC2-B6E0-581066DE6810}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F31E4C0C-5705-4DC2-B6E0-581066DE6810}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F31E4C0C-5705-4DC2-B6E0-581066DE6810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E0F367F-EE0D-4E3B-99BD-067449477B1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E0F367F-EE0D-4E3B-99BD-067449477B1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E0F367F-EE0D-4E3B-99BD-067449477B1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E0F367F-EE0D-4E3B-99BD-067449477B1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
