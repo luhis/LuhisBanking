@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
@@ -24,9 +25,12 @@ namespace TrueLayerAccess
             var client = new HttpClient();
 
             var x = await client.PostAsync(TrueLayerUris.GetAuthTokenUrl, new FormUrlEncodedContent(data));
-            x.ThrowIfNotSuccess();
 
             var json = await x.Content.ReadAsStringAsync();
+            if (!x.IsSuccessStatusCode)
+            {
+                throw new Exception($"Status Code: {x.StatusCode}.  Message: {Json.Deserialize<Error>(json).error}");
+            }
 
             return Json.Deserialize<TokenResponse>(json);
         }
