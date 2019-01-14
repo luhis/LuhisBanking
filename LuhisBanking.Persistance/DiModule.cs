@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LuhisBanking.Persistence
 {
-    public static class DiModule
+    public static class DIModule
     {
         public static void Add(IServiceCollection services)
         {

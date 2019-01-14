@@ -17,9 +17,9 @@ namespace LuhisBanking.Persistence
             SetupLoginTable.Setup(modelBuilder.Entity<Login>());
         }
 
-        public async Task SeedData()
+        public Task SeedData()
         {
-            //// await this.Database.MigrateAsync();
+            return this.Database.EnsureCreatedAsync();
         }
     }
 }

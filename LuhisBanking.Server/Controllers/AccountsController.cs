@@ -21,24 +21,31 @@ namespace LuhisBanking.Server.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult<IReadOnlyList<AccountDto>>> GetAll()
         {
-            var authAccessor = new AuthAccessor(this.Request.Cookies, this.Response.Cookies);
-            var t = await trueLayerService.GetAccounts(authAccessor);
-            return await t.Match(async success =>
+            var t = await trueLayerService.GetAccounts();
+            var errors = t.Where(a => a.IsT1).Select(a =>a.AsT1).ToList();
+            if (errors.Any())
             {
-                var tasks = success.results
-                    .Select(a => (a, trueLayerService.GetAccountBalance(authAccessor, a.account_id)))
+                throw new Exception(errors.First().error);
+            }
+            var final = (t.Select(a => a.AsT0).SelectMany( success =>
+            {
+                var (login, results) = success;
+                var tasks = results.results
+                    .Select(a => (a, trueLayerService.GetAccountBalance(login, a.account_id)))
                     .Select(AsyncTupleFunctions.Convert);
-                var res = await Task.WhenAll(tasks);
-                return new ActionResult<IReadOnlyList<AccountDto>>(res.Select(ToDto).ToList());
+                var res = Task.WhenAll(tasks).Result; //todo
+                var x = res.Select(ToDto).ToList();
+                return x;
+            })).ToList();
 
-            }, error => throw new Exception(error.error));
+            return new ActionResult<IReadOnlyList<AccountDto>>(final);
         }
 
-        private static AccountDto ToDto((Account, OneOf.OneOf<Result<Balance>, Error>) a)
+        private static AccountDto ToDto((Account, OneOf.OneOf<(Login, Result<Balance>), Error>) a)
         {
             var (acc, bal) = a;
             return bal.Match(
-                    success => new AccountDto(acc.account_id, acc.display_name, success.results.Single().available),
+                    success => new AccountDto(acc.account_id, acc.display_name, success.Item2.results.Single().available),
                     error => throw new Exception(error.error)
                 );
         }

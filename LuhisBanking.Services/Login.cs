@@ -4,10 +4,22 @@ namespace LuhisBanking.Services
 {
     public class Login
     {
-        public Guid Id { get; }
+        private Login()
+        {
 
-        public string AccessToken { get; }
+        }
 
-        public string RefreshToken { get; }
+        public Login(Guid id, string accessToken, string refreshToken)
+        {
+            Id = id;
+            AccessToken = accessToken;
+            RefreshToken = refreshToken;
+        }
+
+        public Guid Id { get; private set; }
+
+        public string AccessToken { get; private set; }
+
+        public string RefreshToken { get; private set; }
     }
 }

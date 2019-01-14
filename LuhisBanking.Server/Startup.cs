@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using System.Net.Mime;
+using LuhisBanking.Persistence;
 using LuhisBanking.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -25,7 +26,8 @@ namespace LuhisBanking.Server
 
         private static readonly IEnumerable<Action<IServiceCollection>> DIModules = new Action<IServiceCollection>[]
         {
-            LuhisBanking.Persistence.DiModule.Add
+            LuhisBanking.Server.DIModule.Add,
+            LuhisBanking.Persistence.DIModule.Add
         };
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -36,6 +38,7 @@ namespace LuhisBanking.Server
             {
                 action(services);
             }
+
             services.AddMvc();
 
             services.AddResponseCompression(options =>
@@ -51,7 +54,7 @@ namespace LuhisBanking.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, BankingContext bankingContext)
         {
             app.UseResponseCompression();
 
@@ -66,6 +69,7 @@ namespace LuhisBanking.Server
             });
 
             app.UseBlazor<Client.Startup>();
+            bankingContext.SeedData().Wait();
         }
     }
 }

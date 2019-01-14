@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using OneOf;
 using TrueLayerAccess.Dtos;
 
@@ -6,8 +7,8 @@ namespace LuhisBanking.Services
 {
     public interface ITrueLayerService
     {
-        Task<OneOf<Result<Account>, Error>> GetAccounts(IAuthAccessor authAccessor);
+        Task<IReadOnlyList<OneOf<(Login, Result<Account>), Error>>> GetAccounts();
 
-        Task<OneOf<Result<Balance>, Error>> GetAccountBalance(IAuthAccessor authAccessor, string accountId);
+        Task<OneOf<(Login, Result<Balance>), Error>> GetAccountBalance(Login login, string accountId);
     }
 }

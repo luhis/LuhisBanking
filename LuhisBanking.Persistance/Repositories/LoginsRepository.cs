@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using LuhisBanking.Services;
@@ -8,21 +7,28 @@ namespace LuhisBanking.Persistence.Repositories
 {
     public class LoginsRepository : ILoginsRepository
     {
-        private readonly BankingContext client;
+        private readonly BankingContext context;
 
-        public LoginsRepository(BankingContext client)
+        public LoginsRepository(BankingContext context)
         {
-            this.client = client;
+            this.context = context;
         }
 
-        public Task<IReadOnlyList<Login>> GetAll(CancellationToken cancellationToken)
+        Task<IReadOnlyList<Login>> ILoginsRepository.GetAll(CancellationToken cancellationToken)
         {
-            return client.Logins.ToReadOnlyAsync(cancellationToken);
+            return context.Logins.ToReadOnlyAsync(cancellationToken);
         }
 
-        public Task Add(Login login)
+        Task ILoginsRepository.Add(Login login)
         {
-            throw new NotImplementedException();
+            this.context.Logins.Add(login);
+            return context.SaveChangesAsync();
+        }
+
+        Task ILoginsRepository.Update(Login login)
+        {
+            this.context.Logins.Update(login);
+            return context.SaveChangesAsync();
         }
     }
 }
