@@ -29,7 +29,8 @@ namespace TrueLayerAccess
             var json = await x.Content.ReadAsStringAsync();
             if (!x.IsSuccessStatusCode)
             {
-                throw new Exception($"Status Code: {x.StatusCode}.  Message: {Json.Deserialize<Error>(json).error}");
+                var error = Json.Deserialize<Error>(json);
+                throw new Exception($"Status Code: {x.StatusCode}.  Message: {error.error}");
             }
 
             return Json.Deserialize<TokenResponse>(json);

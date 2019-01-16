@@ -9,11 +9,12 @@ namespace LuhisBanking.Services
 
         }
 
-        public Login(Guid id, string accessToken, string refreshToken)
+        public Login(Guid id, string accessToken, string refreshToken, DateTime modified)
         {
             Id = id;
             AccessToken = accessToken;
             RefreshToken = refreshToken;
+            Modified = modified;
         }
 
         public Guid Id { get; private set; }
@@ -21,5 +22,7 @@ namespace LuhisBanking.Services
         public string AccessToken { get; private set; }
 
         public string RefreshToken { get; private set; }
+
+        public DateTime Modified { get; private set; }
     }
 }

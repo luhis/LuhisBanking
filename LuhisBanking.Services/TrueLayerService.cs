@@ -21,7 +21,18 @@ namespace LuhisBanking.Services
             this.myAppSettings = myAppSettings.Value;
         }
 
-        private static Login UpdateTokens(Login t, string access, string refresh) => new Login(t.Id, access, refresh);
+        private static Login UpdateTokens(Login t, string access, string refresh) => new Login(t.Id, access, refresh, DateTime.UtcNow);
+
+        private async Task<Login> ReAuthorise(Login login)
+        {
+            var reAuth = await TrueLayerAuthApi.RenewAuthToken(new RefreshRequest(myAppSettings.ClientId,
+                myAppSettings.ClientSecret,
+                login.RefreshToken));
+            var newLogin = UpdateTokens(login, reAuth.access_token, reAuth.refresh_token);
+            await this.loginsRepository.Update(newLogin);
+
+            return newLogin;
+        }
 
         private async Task<OneOf<(Login, T), Error>> RetryIfUnAuthorised<T>(Func<string, Task<OneOf<T, Unauthorised, Error>>> f,
             Login login)
@@ -31,12 +42,8 @@ namespace LuhisBanking.Services
                 some => Task.FromResult((OneOf<(Login, T), Error>) (login, some)),
                 async unAuthorised =>
                 {
-                    var reAuth = await TrueLayerAuthApi.RenewAuthToken(new RefreshRequest(myAppSettings.ClientId,
-                        myAppSettings.ClientSecret,
-                        login.RefreshToken));
-                    var newLogin = UpdateTokens(login, reAuth.access_token, reAuth.refresh_token);
-                    await this.loginsRepository.Update(newLogin);
-                    var r = await f(reAuth.access_token);
+                    var reAuth = await ReAuthorise(login);
+                    var r = await f(reAuth.AccessToken);
                     return r.Match(success => (OneOf<(Login, T), Error>) (login, success),
                         _ => throw new Exception("Failed to refresh auth"),
                         error => (OneOf<(Login, T), Error>) error);
