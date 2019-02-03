@@ -342,3 +342,5 @@ healthchecksdb
 
 
 **/appsettings.*.json
+
+*.db
