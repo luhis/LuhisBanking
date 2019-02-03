@@ -53,7 +53,7 @@ namespace LuhisBanking.Services
 
         async Task<IReadOnlyList<OneOf<(Login, Result<Account>), Error>>> ITrueLayerService.GetAccounts(CancellationToken cancellationToken)
         {
-            var logins = await loginsRepository.GetAll(CancellationToken.None);
+            var logins = await loginsRepository.GetAll(cancellationToken);
             var tasks = logins.Select(b => RetryIfUnAuthorised(TrueLayerApi.GetAllAccountsAsync, b, cancellationToken));
             return await Task.WhenAll(tasks);
         }
@@ -66,7 +66,7 @@ namespace LuhisBanking.Services
 
         async Task<IReadOnlyList<OneOf<(Login, Result<MetaData>), Error>>> ITrueLayerService.GetLogins(CancellationToken cancellationToken)
         {
-            var logins = await loginsRepository.GetAll(CancellationToken.None);
+            var logins = await loginsRepository.GetAll(cancellationToken);
             var tasks = logins.Select(b => RetryIfUnAuthorised(TrueLayerApi.GetMetaData, b, cancellationToken));
             return await Task.WhenAll(tasks);
         }
