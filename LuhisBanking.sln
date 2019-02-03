@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueLayer.Api.Test.Unit", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Services", "LuhisBanking.Services\LuhisBanking.Services.csproj", "{F31E4C0C-5705-4DC2-B6E0-581066DE6810}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Persistence", "LuhisBanking.Persistance\LuhisBanking.Persistence.csproj", "{9E0F367F-EE0D-4E3B-99BD-067449477B1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Persistence", "LuhisBanking.Persistance\LuhisBanking.Persistence.csproj", "{9E0F367F-EE0D-4E3B-99BD-067449477B1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Dtos", "LuhisBanking.Dtos\LuhisBanking.Dtos.csproj", "{300D559B-FD2A-4827-93B9-C97BFBA78759}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{9E0F367F-EE0D-4E3B-99BD-067449477B1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E0F367F-EE0D-4E3B-99BD-067449477B1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E0F367F-EE0D-4E3B-99BD-067449477B1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{300D559B-FD2A-4827-93B9-C97BFBA78759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{300D559B-FD2A-4827-93B9-C97BFBA78759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{300D559B-FD2A-4827-93B9-C97BFBA78759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{300D559B-FD2A-4827-93B9-C97BFBA78759}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

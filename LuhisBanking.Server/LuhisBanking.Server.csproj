@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LuhisBanking.Client\LuhisBanking.Client.csproj" />
+    <ProjectReference Include="..\LuhisBanking.Dtos\LuhisBanking.Dtos.csproj" />
     <ProjectReference Include="..\LuhisBanking.Persistance\LuhisBanking.Persistence.csproj" />
     <ProjectReference Include="..\LuhisBanking.Services\LuhisBanking.Services.csproj" />
     <ProjectReference Include="..\LuhisBanking.Shared\LuhisBanking.Shared.csproj" />

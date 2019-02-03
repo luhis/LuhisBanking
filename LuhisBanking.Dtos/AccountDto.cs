@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TrueLayerAccess.Dtos
+namespace LuhisBanking.Dtos
 {
     public class AccountDto
     {

@@ -70,5 +70,12 @@ namespace LuhisBanking.Services
             var tasks = logins.Select(b => RetryIfUnAuthorised(TrueLayerApi.GetMetaData, b, cancellationToken));
             return await Task.WhenAll(tasks);
         }
+
+        public async Task DeleteLogin(Guid id, CancellationToken cancellationToken)
+        {
+            var login = await loginsRepository.GetById(id, cancellationToken);
+            await TrueLayerApi.Delete(login.AccessToken);
+            await loginsRepository.Delete(login, cancellationToken);
+        }
     }
 }

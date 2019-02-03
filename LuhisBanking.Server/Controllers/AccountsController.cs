@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LuhisBanking.Dtos;
 using LuhisBanking.Services;
 using Microsoft.AspNetCore.Mvc;
 using TrueLayerAccess.Dtos;
@@ -23,7 +24,7 @@ namespace LuhisBanking.Server.Controllers
         public async Task<ActionResult<IReadOnlyList<AccountDto>>> GetAll(CancellationToken cancellationToken)
         {
             var t = await trueLayerService.GetAccounts(cancellationToken);
-            var errors = t.Where(a => a.IsT1).Select(a =>a.AsT1).ToList();
+            var errors = t.ExtractErrors();
             if (errors.Any())
             {
                 throw new Exception(string.Join(", ", errors.Select(a => a.error)));

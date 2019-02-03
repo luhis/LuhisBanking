@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
@@ -54,6 +55,12 @@ namespace TrueLayerAccess
         public static Task<OneOf<Result<MetaData>, Unauthorised, Error>> GetMetaData(string accessToken)
         {
             return Get<Result<MetaData>>(accessToken, TrueLayerUris.GetMetaDataUrl);
+        }
+
+        public static Task Delete(string accessToken)
+        {
+            var client = GetClient(accessToken);
+            return client.DeleteAsync(TrueLayerUris.GetDeleteUrl);
         }
     }
 }

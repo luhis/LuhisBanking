@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using OneOf;
@@ -13,5 +14,7 @@ namespace LuhisBanking.Services
         Task<OneOf<(Login, Result<Balance>), Error>> GetAccountBalance(Login login, string accountId, CancellationToken cancellationToken);
 
         Task<IReadOnlyList<OneOf<(Login, Result<MetaData>), Error>>> GetLogins(CancellationToken cancellationToken);
+
+        Task DeleteLogin(Guid id, CancellationToken cancellationToken);
     }
 }

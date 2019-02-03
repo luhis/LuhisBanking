@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using LuhisBanking.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace LuhisBanking.Persistence.Repositories
 {
@@ -19,6 +21,11 @@ namespace LuhisBanking.Persistence.Repositories
             return context.Logins.ToReadOnlyAsync(cancellationToken);
         }
 
+        Task<Login> ILoginsRepository.GetById(Guid id, CancellationToken cancellationToken)
+        {
+            return context.Logins.SingleAsync(a => a.Id == id, cancellationToken);
+        }
+
         Task ILoginsRepository.Add(Login login, CancellationToken cancellationToken)
         {
             this.context.Logins.Add(login);
@@ -29,6 +36,12 @@ namespace LuhisBanking.Persistence.Repositories
         {
             this.context.Logins.Update(login);
             return context.SaveChangesAsync(cancellationToken);
+        }
+
+        Task ILoginsRepository.Delete(Login login, CancellationToken cancellationToken)
+        {
+            this.context.Logins.Remove(login);
+            return this.context.SaveChangesAsync(cancellationToken);
         }
     }
 }

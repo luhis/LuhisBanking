@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using LuhisBanking.Dtos
 @using TrueLayerAccess.Dtos
 @inject HttpClient Http
 
@@ -19,7 +20,6 @@ Welcome to your new app.
             <li>account @acc.Name @acc.Balance</li>
         }
 
-        @string.Join(" ", Accounts.Select(a => a.Name))
     </ul>
 }
 else
@@ -27,23 +27,43 @@ else
     <span>Loading...</span>
 }
 
-matt woz ere.  account count @(Accounts == null ? "null" : Accounts.Length.ToString())
+@if (Logins != null)
+{
+    <ul>
+        @foreach (var acc in Logins)
+        {
+            <li>account @acc.Id @acc.DisplayName</li>
+        }
+
+    </ul>
+}
+else
+{
+    <span>Loading...</span>
+}
+
 @functions
 {
-AccountDto[] Accounts;
-string AuthLink;
+    AccountDto[] Accounts;
+    LoginDto[] Logins;
+    string AuthLink;
 
-protected override async Task OnInitAsync()
-{
-    await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
+    protected override async Task OnInitAsync()
     {
-        AuthLink = await (await Http.GetAsync("api/CallBack/GetAuthLink")).Content.ReadAsStringAsync();
-    });
+        await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
+        {
+            AuthLink = await (await Http.GetAsync("api/CallBack/GetAuthLink")).Content.ReadAsStringAsync();
+        });
 
-    await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
-    {
-        Accounts = (await Http.GetJsonAsync<AccountDto[]>("api/Accounts/GetAll"));
-    });
-}
+        await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
+        {
+            Accounts = (await Http.GetJsonAsync<AccountDto[]>("api/Accounts/GetAll"));
+        });
+
+        await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
+        {
+            Logins = (await Http.GetJsonAsync<LoginDto[]>("api/Connections/GetAll"));
+        });
+    }
 
 }
