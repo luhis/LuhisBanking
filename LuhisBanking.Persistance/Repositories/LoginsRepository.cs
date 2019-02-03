@@ -18,12 +18,12 @@ namespace LuhisBanking.Persistence.Repositories
 
         Task<IReadOnlyList<Login>> ILoginsRepository.GetAll(CancellationToken cancellationToken)
         {
-            return context.Logins.ToReadOnlyAsync(cancellationToken);
+            return context.Logins.AsNoTracking().ToReadOnlyAsync(cancellationToken);
         }
 
         Task<Login> ILoginsRepository.GetById(Guid id, CancellationToken cancellationToken)
         {
-            return context.Logins.SingleAsync(a => a.Id == id, cancellationToken);
+            return context.Logins.AsNoTracking().SingleAsync(a => a.Id == id, cancellationToken);
         }
 
         Task ILoginsRepository.Add(Login login, CancellationToken cancellationToken)
@@ -34,6 +34,7 @@ namespace LuhisBanking.Persistence.Repositories
 
         Task ILoginsRepository.Update(Login login, CancellationToken cancellationToken)
         {
+            context.Entry(login).State = EntityState.Modified;
             this.context.Logins.Update(login);
             return context.SaveChangesAsync(cancellationToken);
         }

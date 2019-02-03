@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Persistence", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Dtos", "LuhisBanking.Dtos\LuhisBanking.Dtos.csproj", "{300D559B-FD2A-4827-93B9-C97BFBA78759}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Test.Integration", "LuhisBanking.Test.Integration\LuhisBanking.Test.Integration.csproj", "{A49FCDB1-EB18-431F-9E54-8B906EB401C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{300D559B-FD2A-4827-93B9-C97BFBA78759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{300D559B-FD2A-4827-93B9-C97BFBA78759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{300D559B-FD2A-4827-93B9-C97BFBA78759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A49FCDB1-EB18-431F-9E54-8B906EB401C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A49FCDB1-EB18-431F-9E54-8B906EB401C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A49FCDB1-EB18-431F-9E54-8B906EB401C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A49FCDB1-EB18-431F-9E54-8B906EB401C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
