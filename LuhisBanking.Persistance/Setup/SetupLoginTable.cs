@@ -1,7 +1,7 @@
 ﻿using LuhisBanking.Services;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace LuhisBanking.Persistence
+namespace LuhisBanking.Persistence.Setup
 {
     public static class SetupLoginTable
     {

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using LuhisBanking.Persistence.Setup;
 using LuhisBanking.Services;
 using Microsoft.EntityFrameworkCore;
 
