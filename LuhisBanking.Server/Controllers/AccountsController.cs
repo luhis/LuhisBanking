@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LuhisBanking.Services;
 using Microsoft.AspNetCore.Mvc;
+using OneOf;
 using TrueLayerAccess.Dtos;
 
 namespace LuhisBanking.Server.Controllers
@@ -27,16 +28,15 @@ namespace LuhisBanking.Server.Controllers
             {
                 throw new Exception(string.Join(", ", errors.Select(a => a.error)));
             }
-            var final = t.Select(a => a.AsT0).SelectMany(success =>
+            var x = await Task.WhenAll(t.Select(a => a.AsT0).SelectMany(success =>
             {
                 var (login, results) = success;
-                var tasks = results.results
+                return results.results
                     .Select(a => (a, trueLayerService.GetAccountBalance(login, a.account_id)))
                     .Select(AsyncTupleFunctions.Convert);
-                var res = Task.WhenAll(tasks).Result; //todo
-                var x = res.Select(ToDto).ToList();
-                return x;
-            });
+            }));
+
+            var final = x.Select(ToDto);
 
             return new ActionResult<IReadOnlyList<AccountDto>>(final.ToList());
         }
