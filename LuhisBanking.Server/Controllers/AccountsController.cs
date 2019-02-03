@@ -25,9 +25,9 @@ namespace LuhisBanking.Server.Controllers
             var errors = t.Where(a => a.IsT1).Select(a =>a.AsT1).ToList();
             if (errors.Any())
             {
-                throw new Exception(errors.First().error);
+                throw new Exception(string.Join(", ", errors.Select(a => a.error)));
             }
-            var final = (t.Select(a => a.AsT0).SelectMany( success =>
+            var final = t.Select(a => a.AsT0).SelectMany(success =>
             {
                 var (login, results) = success;
                 var tasks = results.results
@@ -36,9 +36,9 @@ namespace LuhisBanking.Server.Controllers
                 var res = Task.WhenAll(tasks).Result; //todo
                 var x = res.Select(ToDto).ToList();
                 return x;
-            })).ToList();
+            });
 
-            return new ActionResult<IReadOnlyList<AccountDto>>(final);
+            return new ActionResult<IReadOnlyList<AccountDto>>(final.ToList());
         }
 
         private static AccountDto ToDto((Account, OneOf.OneOf<(Login, Result<Balance>), Error>) a)
