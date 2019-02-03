@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using LuhisBanking.Services;
 using Microsoft.AspNetCore.Mvc;
-using OneOf;
 using TrueLayerAccess.Dtos;
 
 namespace LuhisBanking.Server.Controllers
@@ -20,9 +20,9 @@ namespace LuhisBanking.Server.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<IReadOnlyList<AccountDto>>> GetAll()
+        public async Task<ActionResult<IReadOnlyList<AccountDto>>> GetAll(CancellationToken cancellationToken)
         {
-            var t = await trueLayerService.GetAccounts();
+            var t = await trueLayerService.GetAccounts(cancellationToken);
             var errors = t.Where(a => a.IsT1).Select(a =>a.AsT1).ToList();
             if (errors.Any())
             {
@@ -32,7 +32,7 @@ namespace LuhisBanking.Server.Controllers
             {
                 var (login, results) = success;
                 return results.results
-                    .Select(a => (a, trueLayerService.GetAccountBalance(login, a.account_id)))
+                    .Select(a => (a, trueLayerService.GetAccountBalance(login, a.account_id, cancellationToken)))
                     .Select(AsyncTupleFunctions.Convert);
             }));
 

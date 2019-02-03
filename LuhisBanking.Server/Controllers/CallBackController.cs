@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using LuhisBanking.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +41,7 @@ namespace LuhisBanking.Server.Controllers
             {
                 var r = new CallBackResult(code, scope.Split(' '));
                 var t = await TrueLayerAuthApi.GetAuthToken(new TokenRequest(settings.ClientId, settings.ClientSecret, r.Code, GetRedirectUrl()));
-                await loginsRepository.Add(new Login(Guid.NewGuid(), t.access_token, t.refresh_token, DateTime.UtcNow));
+                await loginsRepository.Add(new Login(Guid.NewGuid(), t.access_token, t.refresh_token, DateTime.UtcNow), CancellationToken.None);
             }
             catch (Exception e)
             {

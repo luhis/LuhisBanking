@@ -23,26 +23,26 @@ namespace LuhisBanking.Services
 
         private static Login UpdateTokens(Login t, string access, string refresh) => new Login(t.Id, access, refresh, DateTime.UtcNow);
 
-        private async Task<Login> ReAuthorise(Login login)
+        private async Task<Login> ReAuthorise(Login login, CancellationToken cancellationToken)
         {
             var reAuth = await TrueLayerAuthApi.RenewAuthToken(new RefreshRequest(myAppSettings.ClientId,
                 myAppSettings.ClientSecret,
                 login.RefreshToken));
             var newLogin = UpdateTokens(login, reAuth.access_token, reAuth.refresh_token);
-            await this.loginsRepository.Update(newLogin);
+            await this.loginsRepository.Update(newLogin, cancellationToken);
 
             return newLogin;
         }
 
         private async Task<OneOf<(Login, T), Error>> RetryIfUnAuthorised<T>(Func<string, Task<OneOf<T, Unauthorised, Error>>> f,
-            Login login)
+            Login login, CancellationToken cancellationToken)
         {
             var res = await f(login.AccessToken);
             return await res.Match(
                 some => Task.FromResult((OneOf<(Login, T), Error>) (login, some)),
                 async unAuthorised =>
                 {
-                    var reAuth = await ReAuthorise(login);
+                    var reAuth = await ReAuthorise(login, cancellationToken);
                     var r = await f(reAuth.AccessToken);
                     return r.Match(success => (OneOf<(Login, T), Error>) (login, success),
                         _ => throw new Exception("Failed to refresh auth"),
@@ -51,17 +51,24 @@ namespace LuhisBanking.Services
                 error => Task.FromResult((OneOf<(Login, T), Error>) error));
         }
 
-        async Task<IReadOnlyList<OneOf<(Login, Result<Account>), Error>>> ITrueLayerService.GetAccounts()
+        async Task<IReadOnlyList<OneOf<(Login, Result<Account>), Error>>> ITrueLayerService.GetAccounts(CancellationToken cancellationToken)
         {
             var logins = await loginsRepository.GetAll(CancellationToken.None);
-            var tasks = logins.Select(b => RetryIfUnAuthorised(TrueLayerApi.GetAllAccountsAsync, b));
+            var tasks = logins.Select(b => RetryIfUnAuthorised(TrueLayerApi.GetAllAccountsAsync, b, cancellationToken));
             return await Task.WhenAll(tasks);
         }
 
         Task<OneOf<(Login, Result<Balance>), Error>> ITrueLayerService.GetAccountBalance(Login login,
-            string accountId)
+            string accountId, CancellationToken cancellationToken)
         {
-            return RetryIfUnAuthorised(t => TrueLayerApi.GetAccountBalance(accountId, t), login);
+            return RetryIfUnAuthorised(t => TrueLayerApi.GetAccountBalance(accountId, t), login, cancellationToken);
+        }
+
+        async Task<IReadOnlyList<OneOf<(Login, Result<MetaData>), Error>>> ITrueLayerService.GetLogins(CancellationToken cancellationToken)
+        {
+            var logins = await loginsRepository.GetAll(CancellationToken.None);
+            var tasks = logins.Select(b => RetryIfUnAuthorised(TrueLayerApi.GetMetaData, b, cancellationToken));
+            return await Task.WhenAll(tasks);
         }
     }
 }

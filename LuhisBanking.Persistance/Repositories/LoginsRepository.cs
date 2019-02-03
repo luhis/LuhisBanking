@@ -19,16 +19,16 @@ namespace LuhisBanking.Persistence.Repositories
             return context.Logins.ToReadOnlyAsync(cancellationToken);
         }
 
-        Task ILoginsRepository.Add(Login login)
+        Task ILoginsRepository.Add(Login login, CancellationToken cancellationToken)
         {
             this.context.Logins.Add(login);
-            return context.SaveChangesAsync();
+            return context.SaveChangesAsync(cancellationToken);
         }
 
-        Task ILoginsRepository.Update(Login login)
+        Task ILoginsRepository.Update(Login login, CancellationToken cancellationToken)
         {
             this.context.Logins.Update(login);
-            return context.SaveChangesAsync();
+            return context.SaveChangesAsync(cancellationToken);
         }
     }
 }

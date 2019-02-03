@@ -52,5 +52,15 @@ namespace TrueLayer.Api.Test.Unit
             r.Should().NotBeNull();
             r.error_details.detail_key.Should().Be("detail value");
         }
+
+        [Fact]
+        public void MetaDataResponse()
+        {
+            var r = Json.Deserialize<Result<MetaData>>(File.ReadAllText("../../../Json/TokenMetaData.json"));
+
+            r.Should().NotBeNull();
+            r.results[0].scopes.Should().BeEquivalentTo(new [] { "info", "accounts", "balance", "transactions", "cards", "offline_access" });
+            r.results[0].provider.display_name.Should().Be("Lloyds Bank");
+        }
     }
 }

@@ -8,8 +8,8 @@ namespace LuhisBanking.Services
     {
         Task<IReadOnlyList<Login>> GetAll(CancellationToken cancellationToken);
 
-        Task Add(Login login);
+        Task Add(Login login, CancellationToken cancellationToken);
 
-        Task Update(Login login);
+        Task Update(Login login, CancellationToken cancellationToken);
     }
 }

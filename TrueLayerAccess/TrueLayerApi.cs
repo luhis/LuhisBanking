@@ -50,5 +50,10 @@ namespace TrueLayerAccess
         {
             return Get<Result<Balance>>(accessToken, TrueLayerUris.GetBalanceUrl(accountId));
         }
+
+        public static Task<OneOf<Result<MetaData>, Unauthorised, Error>> GetMetaData(string accessToken)
+        {
+            return Get<Result<MetaData>>(accessToken, TrueLayerUris.GetMetaDataUrl);
+        }
     }
 }
