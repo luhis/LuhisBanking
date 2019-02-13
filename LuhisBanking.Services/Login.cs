@@ -24,5 +24,12 @@ namespace LuhisBanking.Services
         public string RefreshToken { get; private set; }
 
         public DateTime Modified { get; private set; }
+
+        public void UpdateTokens(string accessToken, string refreshToken)
+        {
+            this.AccessToken = accessToken;
+            this.RefreshToken = refreshToken;
+            this.Modified = DateTime.UtcNow;
+        }
     }
 }

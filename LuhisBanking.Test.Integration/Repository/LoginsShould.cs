@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using FluentAssertions;
 using LuhisBanking.Persistence;
 using LuhisBanking.Persistence.Repositories;
 using LuhisBanking.Services;
@@ -10,23 +11,28 @@ namespace LuhisBanking.Test.Integration.Repository
 {
     public class LoginsShould
     {
-        private readonly ILoginsRepository loginsRepository;
-
-        public LoginsShould()
+        private static BankingContext GetContext()
         {
-            var bk = new BankingContext(new DbContextOptionsBuilder<BankingContext>()
+            return new BankingContext(new DbContextOptionsBuilder<BankingContext>()
                 .UseSqlite("Data Source=../../../../LuhisBanking.db").EnableSensitiveDataLogging().Options);
-            this.loginsRepository = new LoginsRepository(bk);
         }
 
         [Fact]
         public void Update()
         {
             var id = Guid.NewGuid();
-            var n = new Login(id, "aaaa", "bbbb", DateTime.UtcNow);
-            loginsRepository.Add(n, CancellationToken.None).Wait();
-            
-            loginsRepository.Update(n, CancellationToken.None).Wait();
+            using (var context = GetContext())
+            {
+                var r = (ILoginsRepository) new LoginsRepository(context);
+                var n = new Login(id, "aaaa", "bbbb", DateTime.UtcNow);
+                r.Add(n, CancellationToken.None).Wait();
+           
+                n.UpdateTokens("cccc", "dddd");
+                r.Update(n, CancellationToken.None).Wait();
+
+                var updated = r.GetById(id, CancellationToken.None).Result;
+                updated.AccessToken.Should().BeEquivalentTo("cccc");
+            }
         }
     }
 }

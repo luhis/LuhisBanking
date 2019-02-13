@@ -21,17 +21,15 @@ namespace LuhisBanking.Services
             this.myAppSettings = myAppSettings.Value;
         }
 
-        private static Login UpdateTokens(Login t, string access, string refresh) => new Login(t.Id, access, refresh, DateTime.UtcNow);
-
         private async Task<Login> ReAuthorise(Login login, CancellationToken cancellationToken)
         {
             var reAuth = await TrueLayerAuthApi.RenewAuthToken(new RefreshRequest(myAppSettings.ClientId,
                 myAppSettings.ClientSecret,
                 login.RefreshToken));
-            var newLogin = UpdateTokens(login, reAuth.access_token, reAuth.refresh_token);
-            await this.loginsRepository.Update(newLogin, cancellationToken);
+            login.UpdateTokens(reAuth.access_token, reAuth.refresh_token);
+            await this.loginsRepository.Update(login, cancellationToken);
 
-            return newLogin;
+            return login;
         }
 
         private async Task<OneOf<(Login, T), Error>> RetryIfUnAuthorised<T>(Func<string, Task<OneOf<T, Unauthorised, Error>>> f,
@@ -66,6 +64,7 @@ namespace LuhisBanking.Services
 
         async Task<IReadOnlyList<OneOf<(Login, Result<MetaData>), Error>>> ITrueLayerService.GetLogins(CancellationToken cancellationToken)
         {
+            ////todo allow removing corrupted accounts
             var logins = await loginsRepository.GetAll(cancellationToken);
             var tasks = logins.Select(b => RetryIfUnAuthorised(TrueLayerApi.GetMetaData, b, cancellationToken));
             return await Task.WhenAll(tasks);

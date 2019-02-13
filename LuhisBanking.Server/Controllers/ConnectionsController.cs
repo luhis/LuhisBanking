@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using LuhisBanking.Dtos;
 using LuhisBanking.Services;
 using Microsoft.AspNetCore.Mvc;
-using TrueLayerAccess.Dtos;
 
 namespace LuhisBanking.Server.Controllers
 {

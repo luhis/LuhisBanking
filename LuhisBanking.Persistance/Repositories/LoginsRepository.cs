@@ -34,7 +34,6 @@ namespace LuhisBanking.Persistence.Repositories
 
         Task ILoginsRepository.Update(Login login, CancellationToken cancellationToken)
         {
-            context.Entry(login).State = EntityState.Modified;
             this.context.Logins.Update(login);
             return context.SaveChangesAsync(cancellationToken);
         }
