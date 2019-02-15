@@ -16,11 +16,13 @@ namespace LuhisBanking.Server.Controllers
         private readonly ILogger<CallBackController> logger;
         private readonly MyAppSettings settings;
         private readonly ILoginsRepository loginsRepository;
+        private readonly ITrueLayerAuthApi trueLayerAuthApi;
 
-        public CallBackController(IOptions<MyAppSettings> settings, ILogger<CallBackController> logger, ILoginsRepository loginsRepository)
+        public CallBackController(IOptions<MyAppSettings> settings, ILogger<CallBackController> logger, ILoginsRepository loginsRepository, ITrueLayerAuthApi trueLayerAuthApi)
         {
             this.logger = logger;
             this.loginsRepository = loginsRepository;
+            this.trueLayerAuthApi = trueLayerAuthApi;
             this.settings = settings.Value;
         }
 
@@ -40,7 +42,7 @@ namespace LuhisBanking.Server.Controllers
             try
             {
                 var r = new CallBackResult(code, scope.Split(' '));
-                var t = await TrueLayerAuthApi.GetAuthToken(new TokenRequest(settings.ClientId, settings.ClientSecret, r.Code, GetRedirectUrl()));
+                var t = await trueLayerAuthApi.GetAuthToken(new TokenRequest(settings.ClientId, settings.ClientSecret, r.Code, GetRedirectUrl()));
                 await loginsRepository.Add(new Login(Guid.NewGuid(), t.access_token, t.refresh_token, DateTime.UtcNow), CancellationToken.None);
             }
             catch (Exception e)

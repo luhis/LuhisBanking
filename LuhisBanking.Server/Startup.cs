@@ -27,7 +27,8 @@ namespace LuhisBanking.Server
         private static readonly IEnumerable<Action<IServiceCollection>> DIModules = new Action<IServiceCollection>[]
         {
             LuhisBanking.Server.DIModule.Add,
-            LuhisBanking.Persistence.DIModule.Add
+            LuhisBanking.Persistence.DIModule.Add,
+            TrueLayerAccess.DIModule.Add
         };
 
         // This method gets called by the runtime. Use this method to add services to the container.

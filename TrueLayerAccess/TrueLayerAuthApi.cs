@@ -7,7 +7,7 @@ using TrueLayerAccess.Dtos;
 
 namespace TrueLayerAccess
 {
-    public static class TrueLayerAuthApi
+    public class TrueLayerAuthApi : ITrueLayerAuthApi
     {
         private static string JoinWithEscapedSpaces(IEnumerable<string> s) => string.Join("%20", s);
 
@@ -36,7 +36,7 @@ namespace TrueLayerAccess
             return Json.Deserialize<TokenResponse>(json);
         }
 
-        public static Task<TokenResponse> GetAuthToken(TokenRequest req) =>
+        Task<TokenResponse> ITrueLayerAuthApi.GetAuthToken(TokenRequest req) =>
             Post(new Dictionary<string, string>
             {
                 {"grant_type", "authorization_code"},
@@ -46,7 +46,7 @@ namespace TrueLayerAccess
                 {"code", req.Code}
             });
 
-        public static Task<TokenResponse> RenewAuthToken(RefreshRequest req) =>
+        Task<TokenResponse> ITrueLayerAuthApi.RenewAuthToken(RefreshRequest req) =>
             Post(new Dictionary<string, string>
             {
                 {"grant_type", "refresh_token"},

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
@@ -8,7 +7,7 @@ using TrueLayerAccess.Dtos;
 
 namespace TrueLayerAccess
 {
-    public static class TrueLayerApi
+    public class TrueLayerApi : ITrueLayerApi
     {
         private static HttpClient GetClient(string accessToken)
         {
@@ -37,27 +36,27 @@ namespace TrueLayerAccess
             }
         }
 
-        public static Task<OneOf<Result<Account>, Unauthorised, Error>> GetAllAccountsAsync(string accessToken)
+        Task<OneOf<Result<Account>, Unauthorised, Error>> ITrueLayerApi.GetAllAccountsAsync(string accessToken)
         {
             return Get<Result<Account>>(accessToken, TrueLayerUris.GetAccountsUrl);
         }
 
-        public static Task<OneOf<Result<Transaction>, Unauthorised, Error>> GetAccountTransactions(string accountId, string accessToken)
+        Task<OneOf<Result<Transaction>, Unauthorised, Error>> ITrueLayerApi.GetAccountTransactions(string accountId, string accessToken)
         {
             return Get<Result<Transaction>>(accessToken, TrueLayerUris.GetTransactionsUrl(accountId));
         }
 
-        public static Task<OneOf<Result<Balance>, Unauthorised, Error>> GetAccountBalance(string accountId, string accessToken)
+        Task<OneOf<Result<Balance>, Unauthorised, Error>> ITrueLayerApi.GetAccountBalance(string accountId, string accessToken)
         {
             return Get<Result<Balance>>(accessToken, TrueLayerUris.GetBalanceUrl(accountId));
         }
 
-        public static Task<OneOf<Result<MetaData>, Unauthorised, Error>> GetMetaData(string accessToken)
+        Task<OneOf<Result<MetaData>, Unauthorised, Error>> ITrueLayerApi.GetMetaData(string accessToken)
         {
             return Get<Result<MetaData>>(accessToken, TrueLayerUris.GetMetaDataUrl);
         }
 
-        public static Task Delete(string accessToken)
+        Task ITrueLayerApi.Delete(string accessToken)
         {
             var client = GetClient(accessToken);
             return client.DeleteAsync(TrueLayerUris.GetDeleteUrl);
