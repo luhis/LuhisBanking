@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LuhisBanking.Dtos;
 using LuhisBanking.Services;
 using Microsoft.AspNetCore.Mvc;
+using OneOf;
+using TrueLayerAccess.Dtos;
 
 namespace LuhisBanking.Server.Controllers
 {
@@ -19,20 +20,21 @@ namespace LuhisBanking.Server.Controllers
             this.trueLayerService = trueLayerService;
         }
 
+        private static string ToString(OneOf<Result<MetaData>, Error> r)
+        {
+            return r.Match(a => a.results.First().provider.display_name, e => e.error);
+        }
+
         [HttpGet("[action]")]
         public async Task<IEnumerable<LoginDto>> GetAll(CancellationToken cancellationToken)
         {
             var r = await this.trueLayerService.GetLogins(cancellationToken);
-            var errors = r.ExtractErrors();
-            if (errors.Any())
-            {
-                throw new Exception(string.Join(", ", errors.Select(a => a.error)));
-            }
-
-            return r.Select(a => a.AsT0).Select(a =>
+           
+            return r.Select(a =>
             {
                 var (login, result) = a;
-                return new LoginDto(login.Id, result.results.First().provider.display_name);
+                
+                return new LoginDto(login.Id, ToString(result));
             });
         }
     }

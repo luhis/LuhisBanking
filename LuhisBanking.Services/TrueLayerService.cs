@@ -36,39 +36,39 @@ namespace LuhisBanking.Services
             return login;
         }
 
-        private async Task<OneOf<(Login, T), Error>> RetryIfUnAuthorised<T>(Func<string, Task<OneOf<T, Unauthorised, Error>>> f,
+        private async Task<(Login, OneOf<T, Error>)> RetryIfUnAuthorised<T>(
+            Func<string, Task<OneOf<T, Unauthorised, Error>>> f,
             Login login, CancellationToken cancellationToken)
         {
             var res = await f(login.AccessToken);
             return await res.Match(
-                some => Task.FromResult((OneOf<(Login, T), Error>) (login, some)),
+                some => Task.FromResult<(Login, OneOf<T, Error>)>((login, some)),
                 async unAuthorised =>
                 {
                     var reAuth = await ReAuthorise(login, cancellationToken);
                     var r = await f(reAuth.AccessToken);
-                    return r.Match(success => (OneOf<(Login, T), Error>) (login, success),
+                    return r.Match<(Login, OneOf<T, Error>)>(success => (login, success),
                         _ => throw new Exception("Failed to refresh auth"),
-                        error => (OneOf<(Login, T), Error>) error);
+                        error => (login, error));
                 },
-                error => Task.FromResult((OneOf<(Login, T), Error>) error));
+                error => Task.FromResult<(Login, OneOf<T, Error>)>((login, error)));
         }
 
-        async Task<IReadOnlyList<OneOf<(Login, Result<Account>), Error>>> ITrueLayerService.GetAccounts(CancellationToken cancellationToken)
+        async Task<IReadOnlyList<(Login, OneOf<Result<Account>, Error>)>> ITrueLayerService.GetAccounts(CancellationToken cancellationToken)
         {
             var logins = await loginsRepository.GetAll(cancellationToken);
             var tasks = logins.Select(b => RetryIfUnAuthorised(trueLayerApi.GetAllAccountsAsync, b, cancellationToken));
             return await Task.WhenAll(tasks);
         }
 
-        Task<OneOf<(Login, Result<Balance>), Error>> ITrueLayerService.GetAccountBalance(Login login,
+        Task<(Login, OneOf<Result<Balance>, Error>)> ITrueLayerService.GetAccountBalance(Login login,
             string accountId, CancellationToken cancellationToken)
         {
             return RetryIfUnAuthorised(t => trueLayerApi.GetAccountBalance(accountId, t), login, cancellationToken);
         }
 
-        async Task<IReadOnlyList<OneOf<(Login, Result<MetaData>), Error>>> ITrueLayerService.GetLogins(CancellationToken cancellationToken)
+        async Task<IReadOnlyList<(Login, OneOf<Result<MetaData>, Error>)>> ITrueLayerService.GetLogins(CancellationToken cancellationToken)
         {
-            ////todo allow removing corrupted accounts
             var logins = await loginsRepository.GetAll(cancellationToken);
             var tasks = logins.Select(b => RetryIfUnAuthorised(trueLayerApi.GetMetaData, b, cancellationToken));
             return await Task.WhenAll(tasks);

@@ -29,10 +29,10 @@ namespace LuhisBanking.Server.Controllers
             {
                 throw new Exception(string.Join(", ", errors.Select(a => a.error)));
             }
-            var x = await Task.WhenAll(t.Select(a => a.AsT0).SelectMany(success =>
+            var x = await Task.WhenAll(t.SelectMany(success =>
             {
                 var (login, results) = success;
-                return results.results
+                return results.AsT0.results
                     .Select(a => (a, trueLayerService.GetAccountBalance(login, a.account_id, cancellationToken)))
                     .Select(AsyncTupleFunctions.Convert);
             }));
@@ -42,11 +42,12 @@ namespace LuhisBanking.Server.Controllers
             return new ActionResult<IReadOnlyList<AccountDto>>(final.ToList());
         }
 
-        private static AccountDto ToDto((Account, OneOf.OneOf<(Login, Result<Balance>), Error>) a)
+        private static AccountDto ToDto((Account, (Login, OneOf.OneOf<Result<Balance>, Error>)) a)
         {
-            var (acc, bal) = a;
-            return bal.Match(
-                    success => new AccountDto(acc.account_id, acc.display_name, success.Item2.results.Single().available),
+            var (acc, other) = a;
+            var (_, b) = other;
+            return b.Match(
+                    success => new AccountDto(acc.account_id, acc.display_name, success.results.Single().available),
                     error => throw new Exception(error.error)
                 );
         }

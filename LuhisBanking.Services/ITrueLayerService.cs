@@ -9,11 +9,11 @@ namespace LuhisBanking.Services
 {
     public interface ITrueLayerService
     {
-        Task<IReadOnlyList<OneOf<(Login, Result<Account>), Error>>> GetAccounts(CancellationToken cancellationToken);
+        Task<IReadOnlyList<(Login, OneOf<Result<Account>, Error>)>> GetAccounts(CancellationToken cancellationToken);
 
-        Task<OneOf<(Login, Result<Balance>), Error>> GetAccountBalance(Login login, string accountId, CancellationToken cancellationToken);
+        Task<(Login, OneOf<Result<Balance>, Error>)> GetAccountBalance(Login login, string accountId, CancellationToken cancellationToken);
 
-        Task<IReadOnlyList<OneOf<(Login, Result<MetaData>), Error>>> GetLogins(CancellationToken cancellationToken);
+        Task<IReadOnlyList<(Login, OneOf<Result<MetaData>, Error>)>> GetLogins(CancellationToken cancellationToken);
 
         Task DeleteLogin(Guid id, CancellationToken cancellationToken);
     }

@@ -51,7 +51,8 @@ namespace TrueLayer.Api.Test.Unit.Services
                 Options.Create(new MyAppSettings()), loginRepository.Object, trueLayer.Object, trueLayerAuth.Object);
             var r = svc.GetLogins(CancellationToken.None).Result;
             r.Should().NotBeNull();
-            r.First().IsT0.Should().BeTrue();
+            var (_, result) = r.First();
+            result.IsT0.Should().BeTrue();
             mr.VerifyAll();
         }
 
@@ -74,7 +75,8 @@ namespace TrueLayer.Api.Test.Unit.Services
                 Options.Create(new MyAppSettings()), loginRepository.Object, trueLayer.Object, trueLayerAuth.Object);
             var r = svc.GetLogins(CancellationToken.None).Result;
             r.Should().NotBeNull();
-            r.First().IsT1.Should().BeTrue();
+            var (_, result) = r.First();
+            result.IsT1.Should().BeTrue();
             mr.VerifyAll();
         }
     }
