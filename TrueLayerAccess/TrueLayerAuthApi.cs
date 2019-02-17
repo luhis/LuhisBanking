@@ -11,7 +11,7 @@ namespace TrueLayerAccess
     {
         private static string JoinWithEscapedSpaces(IEnumerable<string> s) => string.Join("%20", s);
 
-        public static string AuthLink(string redirect, string clientId)
+        string ITrueLayerAuthApi.AuthLink(string redirect, string clientId)
         {
             var scopes = new[] {"info", "accounts", "balance", "offline_access"};
             return

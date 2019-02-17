@@ -7,5 +7,6 @@ namespace TrueLayerAccess
     {
         Task<TokenResponse> GetAuthToken(TokenRequest req);
         Task<TokenResponse> RenewAuthToken(RefreshRequest req);
+        string AuthLink(string redirect, string clientId);
     }
 }

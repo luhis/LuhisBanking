@@ -56,7 +56,7 @@ namespace LuhisBanking.Server.Controllers
         [HttpGet("[action]")]
         public string GetAuthLink()
         {
-            return TrueLayerAuthApi.AuthLink(GetRedirectUrl(), settings.ClientId);
+            return trueLayerAuthApi.AuthLink(GetRedirectUrl(), settings.ClientId);
         }
     }
 }
