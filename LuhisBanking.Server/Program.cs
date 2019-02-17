@@ -17,6 +17,7 @@ namespace LuhisBanking.Server
                     .AddCommandLine(args)
                     .Build())
                 .UseStartup<Startup>()
+                .UseKestrel(a => a.AddServerHeader = false)
                 .Build();
     }
 }
