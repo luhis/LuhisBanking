@@ -32,7 +32,7 @@ else
     <ul>
         @foreach (var acc in Logins)
         {
-            <li>account @acc.Id @acc.DisplayName</li>
+            <li>account @acc.Id @acc.DisplayName <button onclick="@buttonClick(acc.Id)">Delete</button> </li>
         }
 
     </ul>
@@ -48,6 +48,11 @@ else
     LoginDto[] Logins;
     string AuthLink;
 
+    private async Task RefreshAccounts()
+    {
+        Accounts = (await Http.GetJsonAsync<AccountDto[]>("api/Accounts/GetAll"));
+    }
+
     protected override async Task OnInitAsync()
     {
         await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
@@ -57,7 +62,7 @@ else
 
         await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
         {
-            Accounts = (await Http.GetJsonAsync<AccountDto[]>("api/Accounts/GetAll"));
+            await RefreshAccounts();
         });
 
         await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
@@ -66,4 +71,9 @@ else
         });
     }
 
+    private Func<Task> buttonClick(Guid id) => async () =>
+    {
+        await Http.PostAsync($"api/Connections/delete/{id}", null);
+        await RefreshAccounts();
+    };
 }

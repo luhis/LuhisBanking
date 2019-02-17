@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,20 +23,26 @@ namespace LuhisBanking.Server.Controllers
 
         private static string ToString(OneOf<Result<MetaData>, Error> r)
         {
-            return r.Match(a => a.results.First().provider.display_name, e => e.error);
+            return r.Match(a => a.results.Single().provider.display_name, e => e.error);
         }
 
         [HttpGet("[action]")]
         public async Task<IEnumerable<LoginDto>> GetAll(CancellationToken cancellationToken)
         {
             var r = await this.trueLayerService.GetLogins(cancellationToken);
-           
+
             return r.Select(a =>
             {
                 var (login, result) = a;
-                
+
                 return new LoginDto(login.Id, ToString(result));
             });
+        }
+
+        [HttpPost("[action]/{id}")]
+        public Task Delete(Guid id, CancellationToken cancellationToken)
+        {
+            return this.trueLayerService.DeleteLogin(id, cancellationToken);
         }
     }
 }
