@@ -1,0 +1,49 @@
+﻿@page "/connections"
+@using LuhisBanking.Dtos
+@using TrueLayerAccess.Dtos
+@inject HttpClient Http
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@if (Logins != null)
+{
+    <ul>
+        @foreach (var acc in Logins)
+        {
+            <li>account @acc.Id @acc.DisplayName <button onclick="@buttonClick(acc.Id)">Delete</button> </li>
+        }
+
+    </ul>
+}
+else
+{
+    <span>Loading...</span>
+}
+
+@functions
+{
+    LoginDto[] Logins;
+
+    private async Task RefreshLogins()
+    {
+        Logins = (await Http.GetJsonAsync<LoginDto[]>("api/Connections/GetAll"));
+    }
+
+    protected override async Task OnInitAsync()
+    {
+        await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
+        {
+            await RefreshLogins();
+        });
+    }
+
+    private Func<Task> buttonClick(Guid id) => async () =>
+    {
+        await Http.PostAsync($"api/Connections/delete/{id}", null);
+        await RefreshLogins();
+    };
+}

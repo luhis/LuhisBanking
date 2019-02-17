@@ -27,25 +27,9 @@ else
     <span>Loading...</span>
 }
 
-@if (Logins != null)
-{
-    <ul>
-        @foreach (var acc in Logins)
-        {
-            <li>account @acc.Id @acc.DisplayName <button onclick="@buttonClick(acc.Id)">Delete</button> </li>
-        }
-
-    </ul>
-}
-else
-{
-    <span>Loading...</span>
-}
-
 @functions
 {
     AccountDto[] Accounts;
-    LoginDto[] Logins;
     string AuthLink;
 
     private async Task RefreshAccounts()
@@ -64,16 +48,5 @@ else
         {
             await RefreshAccounts();
         });
-
-        await LuhisBanking.Client.FunctionWrappers.SquashExceptions(async () =>
-        {
-            Logins = (await Http.GetJsonAsync<LoginDto[]>("api/Connections/GetAll"));
-        });
     }
-
-    private Func<Task> buttonClick(Guid id) => async () =>
-    {
-        await Http.PostAsync($"api/Connections/delete/{id}", null);
-        await RefreshAccounts();
-    };
 }
