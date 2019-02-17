@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LuhisBanking.Dtos\LuhisBanking.Dtos.csproj" />
-    <ProjectReference Include="..\LuhisBanking.Shared\LuhisBanking.Shared.csproj" />
     <ProjectReference Include="..\TrueLayerAccess\TrueLayerAccess.csproj" />
   </ItemGroup>
 

@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Server", "Luhi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Client", "LuhisBanking.Client\LuhisBanking.Client.csproj", "{A31AE683-9E40-495D-93D5-5BD29E50D767}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Shared", "LuhisBanking.Shared\LuhisBanking.Shared.csproj", "{78D02953-E4CF-43B8-A133-06516B101F62}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueLayerAccess", "TrueLayerAccess\TrueLayerAccess.csproj", "{F5E9799E-484A-4552-A119-C9A0EAE681FB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueLayer.Api.Test.Unit", "TrueLayer.Api.Test.Uni\TrueLayer.Api.Test.Unit.csproj", "{6559F734-5A62-4659-8909-1F49B6F658BF}"
@@ -17,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Services", "Lu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Persistence", "LuhisBanking.Persistance\LuhisBanking.Persistence.csproj", "{9E0F367F-EE0D-4E3B-99BD-067449477B1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Dtos", "LuhisBanking.Dtos\LuhisBanking.Dtos.csproj", "{300D559B-FD2A-4827-93B9-C97BFBA78759}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Dtos", "LuhisBanking.Dtos\LuhisBanking.Dtos.csproj", "{300D559B-FD2A-4827-93B9-C97BFBA78759}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuhisBanking.Test.Integration", "LuhisBanking.Test.Integration\LuhisBanking.Test.Integration.csproj", "{A49FCDB1-EB18-431F-9E54-8B906EB401C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuhisBanking.Test.Integration", "LuhisBanking.Test.Integration\LuhisBanking.Test.Integration.csproj", "{A49FCDB1-EB18-431F-9E54-8B906EB401C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{A31AE683-9E40-495D-93D5-5BD29E50D767}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A31AE683-9E40-495D-93D5-5BD29E50D767}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A31AE683-9E40-495D-93D5-5BD29E50D767}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78D02953-E4CF-43B8-A133-06516B101F62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78D02953-E4CF-43B8-A133-06516B101F62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78D02953-E4CF-43B8-A133-06516B101F62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78D02953-E4CF-43B8-A133-06516B101F62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F5E9799E-484A-4552-A119-C9A0EAE681FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F5E9799E-484A-4552-A119-C9A0EAE681FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5E9799E-484A-4552-A119-C9A0EAE681FB}.Release|Any CPU.ActiveCfg = Release|Any CPU

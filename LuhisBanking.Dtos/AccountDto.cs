@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LuhisBanking.Dtos
+﻿namespace LuhisBanking.Dtos
 {
     public class AccountDto
     {
@@ -19,6 +17,6 @@ namespace LuhisBanking.Dtos
 
         public string Name { get; set; }
 
-        public Decimal Balance { get; set; }
+        public decimal Balance { get; set; }
     }
 }
