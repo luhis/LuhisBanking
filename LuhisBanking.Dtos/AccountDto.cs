@@ -8,9 +8,9 @@
 
         public AccountDto(string accountId, string name, decimal balance)
         {
-            AccountId = accountId;
-            Name = name;
-            Balance = balance;
+            this.AccountId = accountId;
+            this.Name = name;
+            this.Balance = balance;
         }
 
         public string AccountId { get; set; }
